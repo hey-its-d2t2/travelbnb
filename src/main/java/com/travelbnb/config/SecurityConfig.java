@@ -23,7 +23,9 @@ public class SecurityConfig {
         //http.authorizeHttpRequests().anyRequest().permitAll();
         http.authorizeHttpRequests()
                 .requestMatchers("/api/v1/user/login","/api/v1/user/save").permitAll()
-                .requestMatchers("/api/v1/countries/addCountry").hasRole("ADMIN").anyRequest().authenticated();
+                .requestMatchers("/api/v1/countries/addCountry").hasRole("ADMIN")
+                .requestMatchers("/api/v1/photos/addPhotos").hasAnyRole("ADMIN","USER")
+                .anyRequest().authenticated();
 
         return http.build();
     }
