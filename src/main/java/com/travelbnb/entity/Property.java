@@ -26,6 +26,17 @@ public class Property {
     @JoinColumn(name = "country_id")
     private Country country;
 
+    @Column(name = "no_bedrooms")
+    private Integer no_bedrooms;
+
+    public Integer getNo_bedrooms() {
+        return no_bedrooms;
+    }
+
+    public void setNo_bedrooms(Integer no_bedrooms) {
+        this.no_bedrooms = no_bedrooms;
+    }
+
     public Country getCountry() {
         return country;
     }
