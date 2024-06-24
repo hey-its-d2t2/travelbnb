@@ -29,6 +29,18 @@ public class Property {
     @Column(name = "no_bedrooms")
     private Integer no_bedrooms;
 
+    @ManyToOne
+    @JoinColumn(name = "location_id")
+    private Location location;
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
     public Integer getNo_bedrooms() {
         return no_bedrooms;
     }
