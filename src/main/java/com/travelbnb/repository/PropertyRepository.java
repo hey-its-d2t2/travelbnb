@@ -8,7 +8,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface PropertyRepository extends JpaRepository<Property, Long> {
-    @Query("SELECT p FROM Property p JOIN p.location l WHERE l.name = :locationName")
+    @Query("SELECT p FROM Property p JOIN p.location l JOIN p.country c WHERE l.name = :locationName OR c.name = :locationName")
     List<Property> searchProperty(@Param("locationName") String locationName);
+
+
+
 
 }
