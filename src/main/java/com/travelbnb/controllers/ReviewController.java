@@ -25,7 +25,7 @@ public class ReviewController {
         this.propertyRepository = propertyRepository;
     }
 
-    @PostMapping("/addReview")
+   /* @PostMapping("/addReview")
     public ResponseEntity<Reviews> addReview(
             @AuthenticationPrincipal AppUser user,
             @RequestParam long propertyId,
@@ -33,9 +33,40 @@ public class ReviewController {
     ){
         Optional<Property> opProperty = propertyRepository.findById(propertyId);
         Property property = opProperty.get();
-        review.setAppUser(user);
-        review.setProperty(property);
-        reviewsRepository.save(review);
-        return new ResponseEntity<>(review, HttpStatus.OK);
-    }
+        if(reviewsRepository.findReviewsByUser(user,property)!=null)
+        {
+            review.setAppUser(user);
+            review.setProperty(property);
+            reviewsRepository.save(review);
+            return new ResponseEntity<>(review, HttpStatus.OK);
+        }else{
+            return new ResponseEntity<>("Review exists", HttpStatus.OK);
+        }
+
+    }*/
+   @PostMapping("/addReview")
+   public ResponseEntity<?> addReview(
+           @AuthenticationPrincipal AppUser user,
+           @RequestParam long propertyId,
+           @RequestBody Reviews review
+   ) {
+       Optional<Property> opProperty = propertyRepository.findById(propertyId);
+
+       if (!opProperty.isPresent()) {
+           return new ResponseEntity<>("Property not found", HttpStatus.NOT_FOUND);
+       }
+
+       Property property = opProperty.get();
+
+       if (reviewsRepository.findReviewsByUser(user, property) != null) {
+           return new ResponseEntity<>("Review already exists", HttpStatus.CONFLICT);
+       }
+
+       review.setAppUser(user);
+       review.setProperty(property);
+       reviewsRepository.save(review);
+
+       return new ResponseEntity<>(review, HttpStatus.CREATED);
+   }
+
 }
