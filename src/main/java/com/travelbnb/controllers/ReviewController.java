@@ -11,6 +11,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.swing.text.html.Option;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -68,5 +69,15 @@ public class ReviewController {
 
        return new ResponseEntity<>(review, HttpStatus.CREATED);
    }
+
+   @GetMapping("/getReviewByUser")
+   public ResponseEntity<List<Reviews>> getsUserReviews(
+           @AuthenticationPrincipal AppUser user
+   ){
+       List<Reviews> reviews = reviewsRepository.findByUserReviews(user);
+       return new ResponseEntity<>(reviews,HttpStatus.OK);
+   }
+
+
 
 }
