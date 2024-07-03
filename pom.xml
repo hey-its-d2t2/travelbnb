@@ -56,6 +56,12 @@
 			<artifactId>java-jwt</artifactId>
 			<version>4.2.1</version>
 		</dependency>
+<!--		S3 -->
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-s3</artifactId>
+			<version>1.12.132</version> <!-- Replace with the latest version -->
+		</dependency>
 
 	</dependencies>
 
