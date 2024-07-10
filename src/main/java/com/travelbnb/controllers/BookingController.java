@@ -5,24 +5,27 @@ import com.travelbnb.entity.Booking;
 import com.travelbnb.entity.Property;
 import com.travelbnb.repository.BookingRepository;
 import com.travelbnb.repository.PropertyRepository;
+import com.travelbnb.service.PDFService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/vi/bookings")
+@RequestMapping("/api/v1/bookings")
 public class BookingController {
 
     private PropertyRepository propertyRepository;
     private BookingRepository bookingRepository;
+    private PDFService pdfService;
 
-    public BookingController(PropertyRepository propertyRepository, BookingRepository bookingRepository) {
+    public BookingController(PropertyRepository propertyRepository, BookingRepository bookingRepository,PDFService pdfService) {
         this.propertyRepository = propertyRepository;
         this.bookingRepository = bookingRepository;
+        this.pdfService = pdfService;
     }
 
-    @PostMapping
+    @PostMapping("/newBooking")
     public ResponseEntity<Booking> createBooking(
             @RequestParam long propertyId,
             @AuthenticationPrincipal AppUser user,
@@ -34,7 +37,10 @@ public class BookingController {
         booking.setProperty(property);
         booking.setAppUser(user);
         booking.setPrice(totalPrice);
+        Booking savedBooking = bookingRepository.save(booking);
 
-        return  new ResponseEntity<>(bookingRepository.save(booking), HttpStatus.CREATED);
+        pdfService.generatePDF("D://travelbnb//"+"-Confirmation"+".pdf",savedBooking);
+
+        return  new ResponseEntity<>(savedBooking, HttpStatus.CREATED);
     }
 }
