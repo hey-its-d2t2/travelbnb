@@ -16,7 +16,7 @@ import org.springframework.util.unit.DataSize;
 @Configuration
 public class S3Config {
 
-    /*@Value("${aws.accessKey}")
+    @Value("${aws.accessKey}")
     private String awsKeyId;
 
     @Value("${aws.secretKey}")
@@ -40,7 +40,15 @@ public class S3Config {
         AWSCredentials credentials  = new BasicAWSCredentials(awsKeyId, awsSecretKey);
         return credentials;
     }
-*/
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        factory.setMaxFileSize(DataSize.ofGigabytes(5)); // Set the maximum file size to 5GB
+        factory.setMaxRequestSize(DataSize.ofGigabytes(5)); // Set the maximum request size to 5GB
+        return factory.createMultipartConfig();
+    }
+
+/*
 
     @Value("${cloud.aws.credentials.accessKey}")
     private String accessKey;
@@ -72,6 +80,7 @@ public class S3Config {
         factory.setMaxRequestSize(DataSize.ofGigabytes(5)); // Set the maximum request size to 5GB
         return factory.createMultipartConfig();
     }
+*/
 
 }
 
