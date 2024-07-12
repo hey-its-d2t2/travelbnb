@@ -7,6 +7,7 @@ import com.travelbnb.repository.BookingRepository;
 import com.travelbnb.repository.PropertyRepository;
 import com.travelbnb.service.PDFService;
 import com.travelbnb.service.S3Service;
+import com.travelbnb.service.SmsSenderService;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,12 +30,15 @@ public class BookingController {
     private final PropertyRepository propertyRepository;
     private final BookingRepository bookingRepository;
     private final PDFService pdfService;
+    private SmsSenderService smsSenderService;
 
-    public BookingController(PropertyRepository propertyRepository, BookingRepository bookingRepository, PDFService pdfService, S3Service s3Service) {
+
+    public BookingController(PropertyRepository propertyRepository, BookingRepository bookingRepository, PDFService pdfService, S3Service s3Service, SmsSenderService smsSenderService) {
         this.propertyRepository = propertyRepository;
         this.bookingRepository = bookingRepository;
         this.pdfService = pdfService;
         this.s3Service = s3Service;
+        this.smsSenderService = smsSenderService;
     }
 
     @PostMapping("/newBooking")
@@ -61,6 +65,9 @@ public class BookingController {
                 MultipartFile file = convertToMultipartFile(pdfFilePath);
                 String uploadFileUrl = s3Service.uploadFile(file, "travelbnb");
                 System.out.println(uploadFileUrl);
+               String smsId =  smsSenderService.sendSms(booking.getMobile(),
+                        "Your booking is confirmed. Click here for more details: "+uploadFileUrl);
+                System.out.println(smsId);
             } catch (Exception e) {
                 e.printStackTrace();
             }
