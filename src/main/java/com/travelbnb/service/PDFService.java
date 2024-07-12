@@ -11,7 +11,7 @@ import java.io.FileOutputStream;
 @Service
 public class PDFService {
     //private final String PDF_DIR = "D://travelbnb//";
-    public void generatePDF(String filename, Booking booking) {
+    public boolean generatePDF(String filename, Booking booking) {
         try {
 
         Document document = new Document();
@@ -34,9 +34,10 @@ public class PDFService {
         document.add(totalPrice);
 
         document.close();
+        return  true;
     }catch (Exception e){
             e.printStackTrace();
         }
-
+        return false;
     }
 }
