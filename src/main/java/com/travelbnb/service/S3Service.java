@@ -32,7 +32,8 @@ public class S3Service {
 
         try {
             // Create a temporary file in the system's temp directory
-            File convFile = new File(System.getProperty("java.io.tmpdir") + "/" + file.getOriginalFilename());
+            //System.getProperty("java.io.tmpdir")
+            File convFile = new File(  "D:\\travelbnb\\" + file.getOriginalFilename());
             file.transferTo(convFile);
 
             // Check if the file was successfully created
